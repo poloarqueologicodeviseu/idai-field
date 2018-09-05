@@ -4031,15 +4031,5 @@
       }
     }
   },
-  "relations": [
-    {
-      "domain": [
-        "Room"
-      ],
-      "name": "isRecordedIn",
-      "range": [
-        "Building"
-      ]
-    }
-  ]
+  "relations": []
 }
