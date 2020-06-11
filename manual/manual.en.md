@@ -132,7 +132,7 @@ mass manipulation becomes necessary refer to the respective chapter in this manu
 
 For any resource in iDAI.field a geometry can be supplied. It represents the geographical extend or location of the respective resource.
 Whenever you create a new resource you will be asked if you want to create a geometry as well. You can, i.e. vectorize
-stratigraphical units pictured on a hand-drawn, scanned and georeferenced plan or digital orthoimage. Go to **Image management** to 
+stratigraphical units pictured on a hand-drawn, scanned and georeferenced plan or digital orthoimage. Go to **Images** to 
 read more about georefenced images in iDAI.field.
 
 The mapping functionalities in iDAI.field are basic and include import, export, storing, vectorizing and viewing 
@@ -150,30 +150,24 @@ that only the fields "identifier", "category" and "shortDescription" are being e
 
 <p align="center"><img src="images/en/resources/export_geojson.png" alt="Export Geojson"/></p>
 
-In QGis open the "Data Source Manager" and go to the "Vector"-tab select "Source Type" : "File" and search for 
-the GeoJSON-file exported from iDAI.field. Open and add it to your QGis-Project. If you have different "Geometry types" in your 
-GeoJSON, QGis will have to split the Geometries into homogene layers and thus seperate points, lines and polygons.
-Your data is now represented as layers with features, each feature corresponds to one resource in your iDAI.field database.
-Check the layers properties to make sure the correct coordinate reference system is selected.
-
-<p align="center"><img src="images/en/resources/import_geojson_qgis.png" alt="Import Geojson to QGIS"/></p>
+If you want to edit existing geometries of resources you can do so by right clicking a resource in the list.
 
 
 
 
 
-#### Image management
+### Images
+To handle images in iDAI.field they must be imported. To do so you need to go to Tools **Image management** click on the plus-button and browse your 
+filesystem for images to be imported. The images will then be copied to the folder specified in your **Settings** Image path and renamed according to
+the App-internal UUID for this resource. When an image is imported it becomes a resource in the database. You may choose one of the categories Photo 
+or Drawing. An image resource has specific fields and information which can be displayed and edited by double clicking on the picture within **Image management**
+
+<p align="center"><img src="images/en/resources/image_resourceview.png" alt="View Image"/></p>
+
+In the image view you can see all basic information about the image such as height, width and 
 
 
 
-
-
-
-
-
-However  For 
-
-In iDAI
 
 ### Places
 
