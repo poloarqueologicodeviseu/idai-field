@@ -1,7 +1,7 @@
 {
   "name": "idai-field-client",
   "description": "iDAI.field 2 Client",
-  "version": "2.17.2",
+  "version": "2.17.3",
   "main": "electron/main.js",
   "license": "Apache-2.0",
   "author": "German Archaeological Institute",
@@ -70,7 +70,7 @@
         "to": "manual"
       },
       {
-        "from":  "img/linux",
+        "from": "img/linux",
         "to": "icons"
       },
       "tools",
