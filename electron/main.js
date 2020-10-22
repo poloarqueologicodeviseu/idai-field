@@ -50,9 +50,9 @@ const setLanguages = config => {
             // Use value from deprecated locale setting if existing
             config.languages = [config.locale];
         } else {
-            const locale = getLocale();
-            config.languages = mainLanguages.includes(locale)
-                ? [locale]
+            const lang = electron.app.getLocale().slice(0, 2);
+            config.languages = mainLanguages.includes(lang)
+                ? [lang]
                 : ['de'];
         }
     }
