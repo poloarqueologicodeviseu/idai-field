@@ -1,11 +1,11 @@
+import AppLoading from 'expo-app-loading';
+import { NativeBaseProvider } from 'native-base';
 import PouchDB from 'pouchdb-react-native';
 import React, { Dispatch, ReactElement, SetStateAction, useState } from 'react';
 import { enableScreens } from 'react-native-screens';
-import PouchDbContextProvider from './src/data/pouchdb/PouchContextProvider';
 import { DocumentRepository } from './src/repositories/document-repository';
-import { NativeBaseProvider } from 'native-base';
 import HomeScreen from './src/screens/HomeScreen';
-import AppLoading from 'expo-app-loading';
+
 
 enableScreens();
 
@@ -15,7 +15,7 @@ type SetDocumentRepository = Dispatch<SetStateAction<DocumentRepository | undefi
 export default function App(): ReactElement {
 
     const [documentRepository, setDocumentRepository] = useState<DocumentRepository>();
-    const [finishedLoading, setFinishedLoading] = useState(false);
+    const [finishedLoading, setFinishedLoading] = useState<boolean>(false);
 
     if(!finishedLoading){
         return <AppLoading
@@ -26,9 +26,7 @@ export default function App(): ReactElement {
 
     return (
         <NativeBaseProvider>
-            <PouchDbContextProvider>
-                <HomeScreen />
-            </PouchDbContextProvider>
+            <HomeScreen repository={ documentRepository } />
         </NativeBaseProvider>
     );
 }

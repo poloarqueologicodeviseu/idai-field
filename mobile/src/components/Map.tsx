@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Box, Text } from 'native-base';
 import { Document } from 'idai-field-core';
+import { Center, Text } from 'native-base';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
 interface MapProps {
@@ -10,20 +10,23 @@ interface MapProps {
 const Map: React.FC<MapProps> = ({ documents }) => {
 
     return (
-        <Box style={ styles.card }>
+        <Center >
+            <Text>map</Text>
             {documents && documents.map(document => (
-                <View key={ document._id }>
+                <Center key={ document._id }>
+                    <Text>operation</Text>
                     <Text>{document.resource.id}</Text>
-                </View>
+                </Center>
             ))}
-        </Box>
+        </Center>
     );
 };
 
 const styles= StyleSheet.create({
     card: {
-        width: '90%',
-        alignItems: 'center'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

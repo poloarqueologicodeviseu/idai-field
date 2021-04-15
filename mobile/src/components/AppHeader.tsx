@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { AppBar } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { headerBackgroundColor } from '../constants/colors';
 
 interface AppHeaderProps {
@@ -12,7 +12,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ title, right= null }) => {
     return (
         <AppBar style={ styles.container }>
             <AppBar.Content>
-                {title}
+                <Text>{title}</Text>
             </AppBar.Content>
             <AppBar.Right>
                 {right}

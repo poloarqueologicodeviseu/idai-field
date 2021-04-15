@@ -3,33 +3,25 @@ import { Button, Center, Input, Stack, Text } from 'native-base';
 import { Keyboard, StyleSheet } from 'react-native';
 
 interface ConnectPouchFormProps {
-    dbSetupHandler: (dbName: string, remoteUser: string, remotePassword: string) => void;
+    dbSetupHandler: (dbName: string, remotePassword: string) => void;
 }
 
 const ConnectPouchForm: React.FC<ConnectPouchFormProps> = ({ dbSetupHandler }) => {
 
-    const [remoteUser, setRemoteUser] = useState<string>('test467');
     const [password, setPassword] = useState<string>('Celt1!wedged');
     const [dbName, setDbName] = useState<string>('test467');
 
     const connectionHandler = () => {
-        setRemoteUser('');
         setPassword('');
         setDbName('');
         Keyboard.dismiss();
-        dbSetupHandler(dbName, remoteUser, password);
+        dbSetupHandler(dbName, password);
     };
 
     return (
         <Center>
             <Text>Connect to project</Text>
             <Stack>
-                <Input placeholder="User"
-                    value={ remoteUser }
-                    onChange={ e => setRemoteUser(e.nativeEvent.text) }
-                    autoCapitalize="none"
-                    autoCorrect={ false }
-                />
                 <Input placeholder="Project"
                     value={ dbName }
                     onChange={ e => setDbName(e.nativeEvent.text) }

@@ -1,33 +1,47 @@
-import React, { ReactElement, useContext } from 'react';
-import { Center } from 'native-base';
+import { Modal } from 'native-base';
+import React from 'react';
 import { StyleSheet } from 'react-native';
-import PouchDbContext from '../data/pouchdb/pouch-context';
+import { DocumentRepository } from '../repositories/document-repository';
 import ConnectPouchForm from './ConnectPouchForm';
-import DisconectPouchForm from './DisconnectPouchForm';
 
+interface SettingsProps {
+    show: boolean;
+    onClose: () => void;
+    repository?: DocumentRepository;
+}
 
-const Settings = (): ReactElement => {
+const Settings: React.FC<SettingsProps> = ({ show, onClose, repository }) => {
     
-    const { connect, isDbConnected, disconnect, dbName } = useContext(PouchDbContext);
-
-
     const disconnectHandler = () => {
-        disconnect();
+        repository!.stopSync();
     };
 
-    const connectHandler = (dbName: string, remoteUser: string, remotePassword: string) => {
+    const connectHandler = async (dbName: string, remotePassword: string) => {
 
-        connect(dbName, remoteUser, remotePassword);
+        const url = `https://${dbName}:${remotePassword}@field.dainst.org/sync`;
+        const syncResult = await repository!.setupSync(url, dbName);
+        syncResult.observer.subscribe(
+            status => console.log('STAT', status),
+            err => console.log('SYNCERR', err)
+        );
+        //.then(result => console.log('process', result))
+        //.catch(err => console.log('ERRORHERE',err));
     };
 
 
     return (
-        <Center style={ styles.container }>
-                {isDbConnected() ?
-                <DisconectPouchForm
-                    dbName={ dbName } disconnectHandler={ disconnectHandler } />:
-                <ConnectPouchForm dbSetupHandler={ connectHandler } /> }
-        </Center>
+        <Modal
+            isOpen={ show }
+            onClose={ onClose }>
+            <Modal.CloseButton />
+            <Modal.Content style={ styles.container }>
+                <ConnectPouchForm dbSetupHandler={ connectHandler } />
+                    {/* {isDbConnected() ?
+                        <DisconectPouchForm
+                            dbName={ dbName } disconnectHandler={ disconnectHandler } />:
+                        <ConnectPouchForm dbSetupHandler={ connectHandler } /> } */}
+            </Modal.Content>
+        </Modal>
     );
 };
 
