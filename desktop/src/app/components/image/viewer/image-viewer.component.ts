@@ -1,11 +1,11 @@
-import {Component, OnChanges, Input, OnInit} from '@angular/core';
-import {ImageDocument} from 'idai-field-core';
-import {ImageContainer} from '../../../core/images/imagestore/image-container';
-import {BlobMaker} from '../../../core/images/imagestore/blob-maker';
-import {showMissingImageMessageOnConsole, showMissingOriginalImageMessageOnConsole} from '../log-messages';
-import {M} from '../../messages/m';
-import {Imagestore} from '../../../core/images/imagestore/imagestore';
-import {Messages} from '../../messages/messages';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ImageDocument } from 'idai-field-core';
+import { BlobMaker } from '../../../core/images/imagestore/blob-maker';
+import { ImageContainer } from '../../../core/images/imagestore/image-container';
+import { Imagestore } from '../../../core/images/imagestore/imagestore';
+import { M } from '../../messages/m';
+import { Messages } from '../../messages/messages';
+import { showMissingImageMessageOnConsole, showMissingOriginalImageMessageOnConsole } from '../log-messages';
 
 
 @Component({
@@ -51,7 +51,7 @@ export class ImageViewerComponent implements OnInit, OnChanges {
 
         try {
             image.imgSrc = await this.imagestore.read(
-                document.resource.id, false, false
+                document.resource.id, false
             );
         } catch (e) {
             image.imgSrc = BlobMaker.blackImg;
@@ -59,7 +59,7 @@ export class ImageViewerComponent implements OnInit, OnChanges {
 
         try {
             image.thumbSrc = await this.imagestore.read(
-                document.resource.id, false, true
+                document.resource.id, true
             );
         } catch (e) {
             image.thumbSrc = BlobMaker.blackImg;

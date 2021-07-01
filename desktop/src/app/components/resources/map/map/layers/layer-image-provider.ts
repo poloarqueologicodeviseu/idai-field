@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
-import {SafeResourceUrl} from '@angular/platform-browser';
-import {Imagestore} from '../../../../../core/images/imagestore/imagestore';
-import {ImageContainer} from '../../../../../core/images/imagestore/image-container';
-import {BlobMaker} from '../../../../../core/images/imagestore/blob-maker';
+import { Injectable } from '@angular/core';
+import { BlobMaker } from '../../../../../core/images/imagestore/blob-maker';
+import { ImageContainer } from '../../../../../core/images/imagestore/image-container';
+import { Imagestore } from '../../../../../core/images/imagestore/imagestore';
 
 
 @Injectable()
@@ -41,9 +40,9 @@ export class LayerImageProvider {
 
     private async createImageContainer(resourceId: string): Promise<ImageContainer> {
 
-        let url: string|SafeResourceUrl;
+        let url: string;
         try {
-            url = await this.imagestore.read(resourceId, true, false);
+            url = await this.imagestore.read(resourceId, false);
         } catch (err) {
             console.error('Error while creating image container. Original image not found in imagestore ' +
                 'for document:', document);
@@ -54,7 +53,7 @@ export class LayerImageProvider {
             return { imgSrc: url };
         } else {
             try {
-                return { thumbSrc: await this.imagestore.read(resourceId, true, true) };
+                return { thumbSrc: await this.imagestore.read(resourceId, true) };
             } catch (err) {
                 return { imgSrc: BlobMaker.blackImg };
             }

@@ -1,4 +1,3 @@
-import { SafeResourceUrl } from '@angular/platform-browser';
 import { to } from 'tsfun';
 import { Settings } from '../../settings/settings';
 import { BlobMaker, BlobUrlSet } from './blob-maker';
@@ -88,13 +87,12 @@ export class PouchDbFsImagestore /* implements Imagestore */{
      *   (thumb == false) because missing files in the filesystem can be a
      *   normal result of syncing.
      */
-    public read(key: string, sanitizeAfter: boolean = false,
-                asThumb: boolean = true): Promise<string|SafeResourceUrl> {
+    public read(key: string, asThumb: boolean = true): Promise<string> {
 
         const readFun = asThumb ? this.readThumb.bind(this) : this.readOriginal.bind(this);
         const blobUrls = asThumb ? this.thumbBlobUrls : this.originalBlobUrls;
 
-        if (blobUrls[key]) return Promise.resolve(PouchDbFsImagestore.getUrl(blobUrls[key], sanitizeAfter));
+        if (blobUrls[key]) return Promise.resolve(PouchDbFsImagestore.getUrl(blobUrls[key]));
 
         return readFun(key).then((data: any) => {
 
@@ -107,13 +105,13 @@ export class PouchDbFsImagestore /* implements Imagestore */{
 
             blobUrls[key] = this.blobMaker.makeBlob(data);
 
-            return PouchDbFsImagestore.getUrl(blobUrls[key], sanitizeAfter);
+            return PouchDbFsImagestore.getUrl(blobUrls[key]);
 
         }).catch((err: any) => {
 
             if (!asThumb) return Promise.resolve(''); // handle missing files by showing black placeholder
 
-            return this.createThumbnail(key).then(() => this.read(key, sanitizeAfter))
+            return this.createThumbnail(key).then(() => this.read(key))
                 .catch(() => {
                     return Promise.reject([ImagestoreErrors.NOT_FOUND]); // both thumb and original
                 });
@@ -295,8 +293,8 @@ export class PouchDbFsImagestore /* implements Imagestore */{
     }
 
 
-    private static getUrl(blobUrlSet: BlobUrlSet, sanitizeAfter: boolean = false): string | SafeResourceUrl {
+    private static getUrl(blobUrlSet: BlobUrlSet): string {
 
-        return sanitizeAfter ? blobUrlSet.sanitizedSafeResourceUrl : blobUrlSet.safeResourceUrl;
+        return blobUrlSet.sanitizedSafeResourceUrl;
     }
 }

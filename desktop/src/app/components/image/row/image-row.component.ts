@@ -1,13 +1,13 @@
-import {Component, ElementRef, Input, OnChanges, ViewChild, EventEmitter, Output, SimpleChanges} from '@angular/core';
-import {SafeResourceUrl} from '@angular/platform-browser';
-import {to, aReduce} from 'tsfun';
-import {Datastore, ImageDocument} from 'idai-field-core';
-import {ImageRow, ImageRowItem, ImageRowUpdate, PLACEHOLDER} from '../../../core/images/row/image-row';
-import {AngularUtility} from '../../../angular/angular-utility';
-import {showMissingThumbnailMessageOnConsole} from '../log-messages';
-import {BlobMaker} from '../../../core/images/imagestore/blob-maker';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { SafeResourceUrl } from '@angular/platform-browser';
+import { Datastore, ImageDocument } from 'idai-field-core';
+import { aReduce, to } from 'tsfun';
+import { AngularUtility } from '../../../angular/angular-utility';
+import { BlobMaker } from '../../../core/images/imagestore/blob-maker';
 import { Imagestore } from '../../../core/images/imagestore/imagestore';
-import {ContextMenu} from '../../resources/widgets/context-menu';
+import { ImageRow, ImageRowItem, ImageRowUpdate, PLACEHOLDER } from '../../../core/images/row/image-row';
+import { ContextMenu } from '../../resources/widgets/context-menu';
+import { showMissingThumbnailMessageOnConsole } from '../log-messages';
 
 
 const MAX_IMAGE_WIDTH = 600;
@@ -164,7 +164,7 @@ export class ImageRowComponent implements OnChanges {
             async (result: { [imageId: string]: SafeResourceUrl }, imageId: string) => {
                 if (imageId !== PLACEHOLDER) {
                     try {
-                        result[imageId] = await this.imagestore.read(imageId, false, true);
+                        result[imageId] = await this.imagestore.read(imageId, true);
                     } catch (e) {
                         result[imageId] = BlobMaker.blackImg;
                         showMissingThumbnailMessageOnConsole(imageId);

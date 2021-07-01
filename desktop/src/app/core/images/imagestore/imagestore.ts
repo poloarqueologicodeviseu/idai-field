@@ -1,4 +1,3 @@
-import { SafeResourceUrl } from '@angular/platform-browser';
 import { Settings } from '../../settings/settings';
 
 
@@ -73,7 +72,7 @@ export abstract class Imagestore {
      *     [NOT_FOUND] - in case image is missing
      *     [EMPTY] - in case the retrieved image data is undefined
      */
-     abstract read(key: string, sanitizeAfter?: boolean, thumb?: boolean): Promise<string|SafeResourceUrl>;
+     abstract read(key: string, thumb?: boolean): Promise<string>;
 
 
      abstract readThumbnails(imageIds: string[]): Promise<{ [imageId: string]: Blob }>;
