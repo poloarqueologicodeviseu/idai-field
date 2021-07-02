@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ImageDocument } from 'idai-field-core';
-import { BlobMaker } from '../../../core/images/imagestore/blob-maker';
+import { DataUrlMaker } from '../../../core/images/imagestore/data-url-maker';
 import { ImageContainer } from '../../../core/images/imagestore/image-container';
 import { Imagestore } from '../../../core/images/imagestore/imagestore';
 import { M } from '../../messages/m';
@@ -55,7 +55,7 @@ export class ImageViewerComponent implements OnInit, OnChanges {
         try {
             imageUrl = await this.imagestore.read(document.resource.id, false);
         } catch (e) {
-            imageUrl = BlobMaker.blackImg;
+            imageUrl = DataUrlMaker.blackImg;
         }
         image.imgSrc = this.sanitizer.bypassSecurityTrustUrl(imageUrl);
 
@@ -63,7 +63,7 @@ export class ImageViewerComponent implements OnInit, OnChanges {
         try {
             thumbUrl = await this.imagestore.read(document.resource.id, true);
         } catch (e) {
-            image.thumbSrc = BlobMaker.blackImg;
+            image.thumbSrc = DataUrlMaker.blackImg;
         }
         image.thumbSrc = this.sanitizer.bypassSecurityTrustUrl(thumbUrl);
 
@@ -81,7 +81,7 @@ export class ImageViewerComponent implements OnInit, OnChanges {
             ? image.document.resource.id
             : 'unknown';
 
-        if (image.thumbSrc === BlobMaker.blackImg) {
+        if (image.thumbSrc === DataUrlMaker.blackImg) {
             showMissingImageMessageOnConsole(imageId);
         } else {
             showMissingOriginalImageMessageOnConsole(imageId);

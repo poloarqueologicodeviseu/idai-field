@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { FieldResource } from 'idai-field-core';
-import { BlobMaker } from '../../../core/images/imagestore/blob-maker';
+import { DataUrlMaker } from '../../../core/images/imagestore/data-url-maker';
 import { Imagestore } from '../../../core/images/imagestore/imagestore';
 
 
@@ -27,7 +27,7 @@ export class ThumbnailComponent implements OnChanges {
                 private sanitizer: DomSanitizer) {}
 
 
-    public isThumbnailFound = (): boolean => this.thumbnailUrl !== BlobMaker.blackImg;
+    public isThumbnailFound = (): boolean => this.thumbnailUrl !== DataUrlMaker.blackImg;
 
     public onImageClicked = () => this.onClick.emit();
 
@@ -74,7 +74,7 @@ export class ThumbnailComponent implements OnChanges {
         try {
             thumbUrl = await this.imagestore.read(relations[0], true);
         } catch (e) {
-            thumbUrl = BlobMaker.blackImg;
+            thumbUrl = DataUrlMaker.blackImg;
         }
         return this.sanitizer.bypassSecurityTrustUrl(thumbUrl);
     }

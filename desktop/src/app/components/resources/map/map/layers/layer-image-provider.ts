@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BlobMaker } from '../../../../../core/images/imagestore/blob-maker';
+import { DataUrlMaker } from '../../../../../core/images/imagestore/data-url-maker';
 import { ImageContainer } from '../../../../../core/images/imagestore/image-container';
 import { Imagestore } from '../../../../../core/images/imagestore/imagestore';
 
@@ -46,7 +46,7 @@ export class LayerImageProvider {
         } catch (err) {
             console.error('Error while creating image container. Original image not found in imagestore ' +
                 'for document:', document);
-            return { imgSrc: BlobMaker.blackImg };
+            return { imgSrc: DataUrlMaker.blackImg };
         }
 
         if (url !== '') {
@@ -55,7 +55,7 @@ export class LayerImageProvider {
             try {
                 return { thumbSrc: await this.imagestore.read(resourceId, true) };
             } catch (err) {
-                return { imgSrc: BlobMaker.blackImg };
+                return { imgSrc: DataUrlMaker.blackImg };
             }
         }
     }

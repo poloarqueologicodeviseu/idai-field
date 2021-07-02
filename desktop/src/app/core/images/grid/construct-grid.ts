@@ -1,7 +1,6 @@
-import {ImageResource} from 'idai-field-core';
-import {Document} from 'idai-field-core';
-import {BlobMaker} from '../imagestore/blob-maker';
-import {ImageContainer} from '../imagestore/image-container';
+import { Document, ImageResource } from 'idai-field-core';
+import { DataUrlMaker } from '../imagestore/data-url-maker';
+import { ImageContainer } from '../imagestore/image-container';
 
 
 /**
@@ -48,7 +47,7 @@ function calcRow(documents: Array<Document>, rowIndex: any, calculatedHeight: an
         if (!document) break;
 
         const cell = newCell(document, calculatedHeight);
-        if ((document as any)['id'] !== 'droparea') cell.imgSrc = BlobMaker.blackImg;
+        if ((document as any)['id'] !== 'droparea') cell.imgSrc = DataUrlMaker.blackImg;
 
         row.push(cell as never);
     }
@@ -101,4 +100,3 @@ function newCell(document: any, calculatedHeight: any): ImageContainer {
 
     return cell;
 }
-

@@ -9,14 +9,19 @@ import { Injectable } from '@angular/core';
  * @author Daniel de Oliveira
  * @author Thomas Kleinke
  */
-export class BlobMaker {
+export class DataUrlMaker {
 
     public static blackImg = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
 
 
-    public makeBlobUrl(data: any): string {
+    public async makeDataUrl(data: Blob): Promise<string> {
 
-        return URL.createObjectURL(new Blob([data]));
+        return new Promise<string>(resolve => {
+
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(data);
+        });
     }
 
 

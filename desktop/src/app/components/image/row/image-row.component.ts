@@ -3,7 +3,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Datastore, ImageDocument } from 'idai-field-core';
 import { aReduce, to } from 'tsfun';
 import { AngularUtility } from '../../../angular/angular-utility';
-import { BlobMaker } from '../../../core/images/imagestore/blob-maker';
+import { DataUrlMaker } from '../../../core/images/imagestore/data-url-maker';
 import { Imagestore } from '../../../core/images/imagestore/imagestore';
 import { ImageRow, ImageRowItem, ImageRowUpdate, PLACEHOLDER } from '../../../core/images/row/image-row';
 import { ContextMenu } from '../../resources/widgets/context-menu';
@@ -168,7 +168,7 @@ export class ImageRowComponent implements OnChanges {
                     try {
                         imgUrl = await this.imagestore.read(imageId, true);
                     } catch (e) {
-                        imgUrl = BlobMaker.blackImg;
+                        imgUrl = DataUrlMaker.blackImg;
                         showMissingThumbnailMessageOnConsole(imageId);
                     }
                     result[imageId] = this.sanitizer.bypassSecurityTrustUrl(imgUrl);

@@ -1,6 +1,6 @@
 import { to } from 'tsfun';
 import { Settings } from '../../settings/settings';
-import { BlobMaker } from './blob-maker';
+import { DataUrlMaker } from './data-url-maker';
 import { ImageConverter } from './image-converter';
 import { Imagestore } from './imagestore';
 import { ImagestoreErrors } from './imagestore-errors';
@@ -25,7 +25,7 @@ export class PouchDbFsImagestore implements Imagestore {
 
     constructor(
         private converter: ImageConverter,
-        private blobMaker: BlobMaker,
+        private blobMaker: DataUrlMaker,
         private db: PouchDB.Database) {
     }
 
@@ -88,14 +88,14 @@ export class PouchDbFsImagestore implements Imagestore {
      *   (thumb == false) because missing files in the filesystem can be a
      *   normal result of syncing.
      */
-    public read(key: string, asThumb: boolean = true): Promise<string> {
+    public async read(key: string, asThumb: boolean = true): Promise<string> {
 
         const readFun = asThumb ? this.readThumb.bind(this) : this.readOriginal.bind(this);
         const blobUrls = asThumb ? this.thumbBlobUrls : this.originalBlobUrls;
 
         if (blobUrls[key]) return Promise.resolve(blobUrls[key]);
 
-        return readFun(key).then((data: any) => {
+        return readFun(key).then(async (data: any) => {
 
             if (data == undefined) {
                 console.error('data read was undefined for', key, 'thumbnails was', asThumb);
@@ -104,7 +104,7 @@ export class PouchDbFsImagestore implements Imagestore {
 
             if (asThumb && this.isThumbBroken(data)) return Promise.reject('thumb broken');
 
-            blobUrls[key] = this.blobMaker.makeBlobUrl(data);
+            blobUrls[key] = await this.blobMaker.makeDataUrl(data);
 
             return blobUrls[key];
 
@@ -135,11 +135,11 @@ export class PouchDbFsImagestore implements Imagestore {
 
         for (let imageDocument of imageDocuments) {
             if (imageDocument._attachments?.thumb && !this.isThumbBroken(imageDocument._attachments.thumb.data)) {
-                result[imageDocument.resource.id] = this.blobMaker.makeBlobUrl(imageDocument._attachments.thumb.data);
+                result[imageDocument.resource.id] = await this.blobMaker.makeDataUrl(imageDocument._attachments.thumb.data);
             } else {
                 try {
                     await this.createThumbnail(imageDocument.resource.id);
-                    result[imageDocument.resource.id] = this.blobMaker.makeBlobUrl(await this.readThumb(imageDocument.resource.id));
+                    result[imageDocument.resource.id] = await this.blobMaker.makeDataUrl(await this.readThumb(imageDocument.resource.id));
                 } catch(err) {
                     console.error('Failed to recreate thumbnail for image: ' + imageDocument.resource.id, err);
                 }
@@ -156,7 +156,7 @@ export class PouchDbFsImagestore implements Imagestore {
 
         if (!blobUrls[key]) return;
 
-        BlobMaker.revokeBlobUrl(blobUrls[key]);
+        DataUrlMaker.revokeBlobUrl(blobUrls[key]);
         delete blobUrls[key];
     }
 

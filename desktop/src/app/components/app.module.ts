@@ -14,7 +14,7 @@ import { AppController } from '../core/app-controller';
 import { StateSerializer } from '../core/common/state-serializer';
 import { DatastoreModule } from '../core/datastore/datastore.module';
 import { PouchdbServer } from '../core/datastore/pouchdb/pouchdb-server';
-import { BlobMaker } from '../core/images/imagestore/blob-maker';
+import { DataUrlMaker } from '../core/images/imagestore/data-url-maker';
 import { ImageConverter } from '../core/images/imagestore/image-converter';
 import { Imagestore } from '../core/images/imagestore/imagestore';
 import { PouchDbFsImagestore } from '../core/images/imagestore/pouch-db-fs-imagestore';
@@ -136,13 +136,13 @@ registerLocaleData(localeIt, 'it');
         },
         {
             provide: Imagestore,
-            useFactory: function(pouchdbManager: PouchdbManager, converter: ImageConverter, blobMaker: BlobMaker) {
+            useFactory: function(pouchdbManager: PouchdbManager, converter: ImageConverter, blobMaker: DataUrlMaker) {
                 return new PouchDbFsImagestore(converter, blobMaker, pouchdbManager.getDb());
             },
-            deps: [PouchdbManager, ImageConverter, BlobMaker]
+            deps: [PouchdbManager, ImageConverter, DataUrlMaker]
         },
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        BlobMaker,
+        DataUrlMaker,
         ImageConverter,
         AppController,
         {
