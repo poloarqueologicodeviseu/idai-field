@@ -2,6 +2,7 @@ import { to } from 'tsfun';
 import { Settings } from '../../settings/settings';
 import { BlobMaker, BlobUrlSet } from './blob-maker';
 import { ImageConverter } from './image-converter';
+import { Imagestore } from './imagestore';
 import { ImagestoreErrors } from './imagestore-errors';
 
 const fs = typeof window !== 'undefined' ? window.require('fs') : require('fs');
@@ -14,7 +15,7 @@ const fs = typeof window !== 'undefined' ? window.require('fs') : require('fs');
  * @author Sebastian Cuy
  * @author Thomas Kleinke
  */
-export class PouchDbFsImagestore /* implements Imagestore */{
+export class PouchDbFsImagestore implements Imagestore {
 
     private projectPath: string|undefined = undefined;
 
@@ -36,9 +37,9 @@ export class PouchDbFsImagestore /* implements Imagestore */{
     public isThumbBroken = (data: Blob|any|undefined) => data === undefined || data.size == 0 || data.size == 2;
 
 
-    public init(settings: Settings): Promise<any> {
+    public init(settings: Settings): Promise<void> {
 
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
 
             if (!fs.existsSync(settings.imagestorePath)) {
                 try {
@@ -60,7 +61,7 @@ export class PouchDbFsImagestore /* implements Imagestore */{
                 }
             }
 
-            resolve(undefined);
+            resolve();
         });
     }
 
@@ -70,7 +71,7 @@ export class PouchDbFsImagestore /* implements Imagestore */{
      * @param data the binary data to be stored
      * @param documentExists
      */
-    public create(key: string, data: ArrayBuffer, documentExists: boolean = false): Promise<any> {
+    public create(key: string, data: ArrayBuffer, documentExists: boolean = false): Promise<void> {
 
         return this.write(key, data, false, documentExists);
     }
@@ -178,7 +179,7 @@ export class PouchDbFsImagestore /* implements Imagestore */{
      * @param key the identifier for the data
      * @param data the binary data to be stored
      */
-    public update(key: string, data: ArrayBuffer): Promise<any> {
+    public update(key: string, data: ArrayBuffer): Promise<void> {
 
         return this.write(key, data, true, true);
     }
@@ -188,7 +189,7 @@ export class PouchDbFsImagestore /* implements Imagestore */{
      * @param key the identifier for the data to be removed
      * @param options
      */
-    public async remove(key: string, options?: { fs?: true } /* TODO review */): Promise<any> {
+    public async remove(key: string, options?: { fs?: true } /* TODO review */): Promise<void> {
 
         if (options?.fs === true) {
             if (fs.existsSync(this.projectPath + key)) {
@@ -203,7 +204,7 @@ export class PouchDbFsImagestore /* implements Imagestore */{
                 this.db.get(key)
                     .then((result: any) => result._rev)
                     .then((rev: any) => this.db.removeAttachment(key, 'thumb', rev))
-                    .then(() => resolve(undefined))
+                    .then(() => resolve())
                     .catch((err: any) => {
                         console.error(err);
                         console.error(key);
@@ -214,7 +215,7 @@ export class PouchDbFsImagestore /* implements Imagestore */{
     }
 
 
-    private write(key: any, data: any, update: any, documentExists: any): Promise<any> {
+    private write(key: any, data: any, update: any, documentExists: any): Promise<void> {
 
         let flag = update ? 'w' : 'wx';
 
@@ -227,10 +228,10 @@ export class PouchDbFsImagestore /* implements Imagestore */{
                 }
                 else {
                     this.putAttachment(data, key, documentExists)
-                        .then(() => resolve(undefined)
+                        .then(() => resolve()
                     ).catch((warning: any) => {
                         console.warn(warning);
-                        resolve(undefined);
+                        resolve();
                     });
                 }
             });
