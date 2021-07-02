@@ -1,5 +1,4 @@
-import {Injectable, SecurityContext} from '@angular/core';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 /**
@@ -15,32 +14,14 @@ export class BlobMaker {
     public static blackImg = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
 
 
-    constructor(private sanitizer: DomSanitizer) {};
+    public makeBlobUrl(data: any): string {
 
-
-    public makeBlob(data: any): any {
-
-        const url = URL.createObjectURL(new Blob([data]));
-        const safeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-
-        return {
-            url: url,
-            safeResourceUrl: safeResourceUrl,
-            sanitizedSafeResourceUrl: this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeResourceUrl) as string
-        };
+        return URL.createObjectURL(new Blob([data]));
     }
 
 
-    public static revokeBlob(revokeUrl: string) {
+    public static revokeBlobUrl(revokeUrl: string) {
 
         URL.revokeObjectURL(revokeUrl);
     }
-}
-
-
-export interface BlobUrlSet {
-
-    url: string;
-    safeResourceUrl: SafeResourceUrl;
-    sanitizedSafeResourceUrl: string;
 }

@@ -1,11 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, SimpleChanges, Output, ElementRef} from '@angular/core';
-import {flatten} from 'tsfun';
-import {Datastore, ImageDocument} from 'idai-field-core';
-import {Document} from 'idai-field-core';
-import {ImageUploadResult} from '../upload/image-uploader';
-import {Imagestore} from '../../../core/images/imagestore/imagestore';
-import {constructGrid} from '../../../core/images/grid/construct-grid';
-import {BlobMaker} from '../../../core/images/imagestore/blob-maker';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Datastore, ImageDocument } from 'idai-field-core';
+import { flatten } from 'tsfun';
+import { constructGrid } from '../../../core/images/grid/construct-grid';
+import { Imagestore } from '../../../core/images/imagestore/imagestore';
 
 
 const DROPAREA = 'droparea';
@@ -49,7 +47,7 @@ export class ImageGridComponent implements OnChanges {
     constructor(private element: ElementRef,
                 private imagestore: Imagestore,
                 private datastore: Datastore,
-                private blobMaker: BlobMaker) {}
+                private sanitizer: DomSanitizer) {}
 
 
     async ngOnChanges(changes: SimpleChanges) {
@@ -110,7 +108,7 @@ export class ImageGridComponent implements OnChanges {
 
     private async loadImages(rows: any) {
 
-        const imageData: { [imageId: string]: Blob } = await this.getImageData(rows);
+        const imageData: { [imageId: string]: string } = await this.getImageData(rows);
 
         for (let row of rows) {
             for (let cell of row) {
@@ -120,14 +118,14 @@ export class ImageGridComponent implements OnChanges {
                     || cell.document.resource.id === DROPAREA) continue;
 
                 if (imageData[cell.document.resource.id] ) {
-                    cell.imgSrc = this.blobMaker.makeBlob(imageData[cell.document.resource.id]).safeResourceUrl;
+                    cell.imgSrc = this.sanitizer.bypassSecurityTrustUrl(imageData[cell.document.resource.id]);
                 }
             }
         }
     }
 
 
-    private getImageData(rows: any): Promise<{ [imageId: string]: Blob }> {
+    private getImageData(rows: any): Promise<{ [imageId: string]: string }> {
 
         const imageIds: string[] =
             (flatten(rows.map(row => row.map(cell => cell.document.resource.id))) as any)

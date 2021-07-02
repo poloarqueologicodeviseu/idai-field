@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Datastore, ImageDocument } from 'idai-field-core';
 import { aReduce, to } from 'tsfun';
 import { AngularUtility } from '../../../angular/angular-utility';
@@ -48,7 +48,8 @@ export class ImageRowComponent implements OnChanges {
 
 
     constructor(private imagestore: Imagestore,
-                private datastore: Datastore) {}
+                private datastore: Datastore,
+                private sanitizer: DomSanitizer) {}
 
 
     public hasNextPage = (): boolean => this.imageRow && this.imageRow.hasNextPage();
@@ -163,12 +164,14 @@ export class ImageRowComponent implements OnChanges {
             imageIds,
             async (result: { [imageId: string]: SafeResourceUrl }, imageId: string) => {
                 if (imageId !== PLACEHOLDER) {
+                    let imgUrl: string;
                     try {
-                        result[imageId] = await this.imagestore.read(imageId, true);
+                        imgUrl = await this.imagestore.read(imageId, true);
                     } catch (e) {
-                        result[imageId] = BlobMaker.blackImg;
+                        imgUrl = BlobMaker.blackImg;
                         showMissingThumbnailMessageOnConsole(imageId);
                     }
+                    result[imageId] = this.sanitizer.bypassSecurityTrustUrl(imgUrl);
                 }
                 return result;
             },

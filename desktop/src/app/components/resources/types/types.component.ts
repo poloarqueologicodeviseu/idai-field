@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Imagestore } from '../../../core/images/imagestore/imagestore';
-import { Document, Datastore, FieldDocument, Relations, SyncService, SyncStatus, Resource, RelationsManager } from 'idai-field-core';
-import { filter, flatten, flow, is, Map, map, remove, set, take, pipe } from 'tsfun';
+import { Datastore, Document, FieldDocument, ProjectCategories, Relations, RelationsManager, Resource, SyncService, SyncStatus } from 'idai-field-core';
+import { filter, flatten, flow, is, Map, map, pipe, remove, set, take } from 'tsfun';
 import { makeLookup } from '../../../../../../core/src/tools/transformers';
-import { ProjectCategories } from 'idai-field-core';
+import { Imagestore } from '../../../core/images/imagestore/imagestore';
 import { PLACEHOLDER } from '../../../core/images/row/image-row';
 import { NavigationPath } from '../../../core/resources/view/state/navigation-path';
 import { ViewFacade } from '../../../core/resources/view/view-facade';
 import { TabManager } from '../../../core/tabs/tab-manager';
 import { TypeImagesUtil } from '../../../core/util/type-images-util';
+import { ComponentHelpers } from '../../component-helpers';
 import { MenuContext, MenuService } from '../../menu-service';
 import { RoutingService } from '../../routing-service';
 import { Loading } from '../../widgets/loading';
@@ -17,7 +17,6 @@ import { ResourcesComponent } from '../resources.component';
 import { ViewModalLauncher } from '../service/view-modal-launcher';
 import { ContextMenu } from '../widgets/context-menu';
 import { ContextMenuAction } from '../widgets/context-menu.component';
-import {ComponentHelpers} from '../../component-helpers';
 
 
 @Component({
@@ -59,7 +58,7 @@ export class TypesComponent extends BaseList implements OnChanges {
      */
     public linkedDocuments: Array<FieldDocument> = [];
 
-    public images: { [resourceId: string]: Array<Blob> } = {};
+    public images: { [resourceId: string]: Array<string> } = {};
     public contextMenu: ContextMenu = new ContextMenu();
 
     private expandAllGroups: boolean = false;
@@ -297,7 +296,7 @@ export class TypesComponent extends BaseList implements OnChanges {
 
         const imageIds: string[] = flatten(imageLinks.map(_ => _.imageIds));
 
-        const urls: { [imageId: string]: Blob } = await this.imagestore.readThumbnails(imageIds);
+        const urls: { [imageId: string]: string } = await this.imagestore.readThumbnails(imageIds);
 
         imageLinks.forEach(imageLink => this.images[imageLink.resourceId] = imageLink.imageIds.map(id => urls[id]));
     }

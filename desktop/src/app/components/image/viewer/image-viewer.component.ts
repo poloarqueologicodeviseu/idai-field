@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ImageDocument } from 'idai-field-core';
 import { BlobMaker } from '../../../core/images/imagestore/blob-maker';
 import { ImageContainer } from '../../../core/images/imagestore/image-container';
@@ -24,7 +25,8 @@ export class ImageViewerComponent implements OnInit, OnChanges {
 
 
     constructor(private imagestore: Imagestore,
-                private messages: Messages) {}
+                private messages: Messages,
+                private sanitizer: DomSanitizer) {}
 
 
     ngOnInit() {
@@ -49,21 +51,21 @@ export class ImageViewerComponent implements OnInit, OnChanges {
 
         const image: ImageContainer = { document: document };
 
+        let imageUrl: string;
         try {
-            image.imgSrc = await this.imagestore.read(
-                document.resource.id, false
-            );
+            imageUrl = await this.imagestore.read(document.resource.id, false);
         } catch (e) {
-            image.imgSrc = BlobMaker.blackImg;
+            imageUrl = BlobMaker.blackImg;
         }
+        image.imgSrc = this.sanitizer.bypassSecurityTrustUrl(imageUrl);
 
+        let thumbUrl: string;
         try {
-            image.thumbSrc = await this.imagestore.read(
-                document.resource.id, true
-            );
+            thumbUrl = await this.imagestore.read(document.resource.id, true);
         } catch (e) {
             image.thumbSrc = BlobMaker.blackImg;
         }
+        image.thumbSrc = this.sanitizer.bypassSecurityTrustUrl(thumbUrl);
 
         this.showConsoleErrorIfImageIsMissing(image);
 

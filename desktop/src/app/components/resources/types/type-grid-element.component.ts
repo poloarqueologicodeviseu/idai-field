@@ -1,6 +1,5 @@
-import {Input, Component, OnChanges, SimpleChanges} from '@angular/core';
-import {SafeResourceUrl} from '@angular/platform-browser';
-import {BlobMaker} from '../../../core/images/imagestore/blob-maker';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FieldDocument } from 'idai-field-core';
 
 @Component({
@@ -15,12 +14,12 @@ export class TypeGridElementComponent implements OnChanges {
 
     @Input() document: FieldDocument;
     @Input() subtype?: FieldDocument;
-    @Input() images?: Array<Blob>;
+    @Input() images?: Array<string>;
 
     public imageUrls: Array<SafeResourceUrl> = [];
 
 
-    constructor(private blobMaker: BlobMaker) {}
+    constructor(private sanitizer: DomSanitizer) {}
 
 
     async ngOnChanges(changes: SimpleChanges) {
@@ -35,9 +34,9 @@ export class TypeGridElementComponent implements OnChanges {
 
         if (!this.images) return;
 
-        for (let blob of this.images) {
-            const url = this.blobMaker.makeBlob(blob);
-            this.imageUrls.push(url.safeResourceUrl);
+        for (let image of this.images) {
+            const safeUrl = this.sanitizer.bypassSecurityTrustUrl(image);
+            this.imageUrls.push(safeUrl);
         }
     }
 }

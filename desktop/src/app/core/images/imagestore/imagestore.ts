@@ -38,7 +38,7 @@ export abstract class Imagestore {
      *   Rejects with
      *     [GENERIC_ERROR] - in case of error
      */
-    abstract create(key: string, data: ArrayBuffer, documentExists?: boolean): Promise<any>;
+    abstract create(key: string, data: ArrayBuffer, documentExists?: boolean): Promise<void>;
 
 
     /**
@@ -48,7 +48,7 @@ export abstract class Imagestore {
      *    Rejects with
      *     [GENERIC_ERROR] - in case of error
      */
-    abstract update(key: string, data: ArrayBuffer): Promise<any>;
+    abstract update(key: string, data: ArrayBuffer): Promise<void>;
 
 
     /**
@@ -58,7 +58,7 @@ export abstract class Imagestore {
      *   Rejects with
      *     [GENERIC_ERROR] - in case of error
      */
-    abstract remove(key: string, options?: { fs?: true }): Promise<any>;
+    abstract remove(key: string, options?: { fs?: true }): Promise<void>;
 
 
     /**
@@ -75,7 +75,7 @@ export abstract class Imagestore {
      abstract read(key: string, thumb?: boolean): Promise<string>;
 
 
-     abstract readThumbnails(imageIds: string[]): Promise<{ [imageId: string]: Blob }>;
+     abstract readThumbnails(imageIds: string[]): Promise<{ [imageId: string]: string }>;
 
 
      /**

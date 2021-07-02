@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { FieldResource } from 'idai-field-core';
 import { BlobMaker } from '../../../core/images/imagestore/blob-maker';
@@ -23,7 +23,8 @@ export class ThumbnailComponent implements OnChanges {
 
 
     constructor(private imagestore: Imagestore,
-                private i18n: I18n) {}
+                private i18n: I18n,
+                private sanitizer: DomSanitizer) {}
 
 
     public isThumbnailFound = (): boolean => this.thumbnailUrl !== BlobMaker.blackImg;
@@ -69,10 +70,12 @@ export class ThumbnailComponent implements OnChanges {
 
         if (!relations || relations.length === 0) return undefined;
 
+        let thumbUrl: string;
         try {
-            return await this.imagestore.read(relations[0], true);
+            thumbUrl = await this.imagestore.read(relations[0], true);
         } catch (e) {
-            return BlobMaker.blackImg;
+            thumbUrl = BlobMaker.blackImg;
         }
+        return this.sanitizer.bypassSecurityTrustUrl(thumbUrl);
     }
 }
