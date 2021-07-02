@@ -78,7 +78,7 @@ describe('PouchDbFsImagestore', () => {
     it('should read a file', (done) => {
 
         store.create('test_read', str2ab('qwer'))
-            .then(() => { return store.read('test_read',false,false); })
+            .then(() => { return store.read('test_read',false); })
             .then((data) => {
                 expect(data.toString()).toEqual('qwer');
                 done();
@@ -115,11 +115,11 @@ describe('PouchDbFsImagestore', () => {
             .then(() => {
                 return store.remove('test_remove')
                     .then(() => {
-                        store.read('test_remove', false, false)
+                        store.read('test_remove', false)
                             .then(result => {
                                 // missing original is ok
                                 expect(result).toEqual('');
-                                return store.read('test_remove', false, true);
+                                return store.read('test_remove', true);
                             })
                             .then(() => {
                                 // missing thumb is not ok
