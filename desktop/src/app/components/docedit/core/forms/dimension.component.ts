@@ -1,11 +1,9 @@
-import {Component, Input} from '@angular/core';
-import {DecimalPipe} from '@angular/common';
-import {clone} from 'tsfun';
-import {Resource, Dimension} from 'idai-field-core';
-import {UtilTranslations} from '../../../../core/util/util-translations';
-import {FieldDefinition} from 'idai-field-core';
-import {ValuelistUtil} from '../../../../core/util/valuelist-util';
-
+import { Component, Input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { clone } from 'tsfun';
+import { Resource, Dimension, FieldDefinition } from 'idai-field-core';
+import { UtilTranslations } from '../../../../core/util/util-translations';
+import { ValuelistUtil } from '../../../../core/util/valuelist-util';
 
 type DimensionInEditing = { original: Dimension, clone: Dimension };
 
@@ -29,6 +27,9 @@ export class DimensionComponent {
 
     constructor(private decimalPipe: DecimalPipe,
                 private utilTranslations: UtilTranslations) {}
+
+    
+    public isValid = (dimension: Dimension) => Dimension.isValid(dimension);
 
 
     public createNewDimension() {
