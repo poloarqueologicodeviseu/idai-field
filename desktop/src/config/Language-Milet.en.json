@@ -79,6 +79,33 @@
     "quantificationOther": {
       "label": "Other elements (not on form)",
       "description": "Record other pottery fragments that cannot be entered into the form above - use this carefully and only if absolutely neccessary."
+    },
+    "fabricColorBreakMunsell": {
+      "label": "Fabric: Color core (Munsell, Format!)"
+    },
+    "fabricHardness": {
+      "label": "Fabric: Hardness"
+    },
+    "fabricStructure": {
+      "label": "Fabric: Structure at Break"
+    },
+    "temperType": {
+      "label": "Fabric: Type of Temper"
+    },
+    "temperTypeOther": {
+      "label": "Fabric: Type of Temper (other components)"
+    },
+    "temperAmount": {
+      "label": "Fabric: Amount"
+    },
+    "temperGrain": {
+      "label": "Fabric: Grain"
+    },
+    "surfaceTreatment": {
+      "label": "Surface and Decoration: Treatment"
+    },
+    "surfaceTreatmentDescription": {
+      "label": "Surface and Decoration: Treatment - Description"
     }
   },
   "relations": {
@@ -206,7 +233,7 @@
         }
       }
     },
-    "TrenchSketch": {
+    "Planum": {
       "label": "Trench Sketch",
       "fields": {}
     },
@@ -231,6 +258,10 @@
         "YearOfFind": {
           "label": "Year (in case of Altfund)",
           "description": "Year in which the object has been found or first recorded, in case of Altfunde"
+        },
+        "comparisonLit": {
+          "label": "Comparison (Literature)",
+          "description": "Citation of comparable published finds."
         }
       }
     },
@@ -463,6 +494,9 @@
     },
     "Photo": {
       "fields": {
+        "date": {
+          "label": "Date (at which the Photograph was taken)"
+        },
         "viewDirection": {
           "label": "View in direction of ...",
           "description": "Direction the Photograph was shot in."
@@ -584,6 +618,9 @@
         },
         "countTransportamphoraeBase": {
           "label": "Transportamphorae (Base fragments)"
+        },
+        "countTransportamphoraeWall": {
+          "label": "Transportamphorae (Wall fragments)"
         },
         "countTransportamphoraeHandle": {
           "label": "Transportamphorae (Handle fragments)"
