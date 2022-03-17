@@ -72,8 +72,7 @@
       "orientation"
     ],
     "valuelists": {
-      "orientation": "orientation-default-1",
-      "excavationType": "trench-excavationType-default"
+      "orientation": "orientation-default-1"
     },
     "fields": {
       "trenchComment": {
